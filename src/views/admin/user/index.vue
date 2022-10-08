@@ -14,11 +14,26 @@
                 tooltip: '查看用户详情',
                 onClick: handleView.bind(null, record),
               },
+              {
+                icon: 'clarity:note-edit-line',
+                tooltip: '编辑',
+                onClick: handleEdit.bind(null, record),
+              },
+              {
+                icon: 'ant-design:delete-outlined',
+                color: 'error',
+                popConfirm: {
+                  title: '是否确认删除',
+                  placement: 'left',
+                  confirm: handleDelete.bind(null, record),
+                },
+              },
             ]"
           />
         </template>
       </template>
     </BasicTable>
+    <ModifyModal @register="registerModal" @success="handleSuccess" />
   </PageWrapper>
 </template>
 <script lang="ts">
@@ -28,12 +43,16 @@
   import { useGo } from '/@/hooks/web/usePage';
   import { columns, searchFormSchema } from './data';
   import OrganizationTree from './OrganizationTree.vue';
-  import { pagelist } from '/@/api/security/admin/user';
+  import { pagelist, remove } from '/@/api/security/admin/user';
+
+  import { useModal } from '/@/components/Modal';
+  import ModifyModal from './ModifyModal.vue';
   export default defineComponent({
-    components: { PageWrapper, BasicTable, TableAction, OrganizationTree },
+    components: { PageWrapper, BasicTable, TableAction, OrganizationTree, ModifyModal },
     setup() {
       const go = useGo();
       const searchInfo = reactive<Recordable>({});
+      const [registerModal, { openModal }] = useModal();
       const [registerTable, { reload, updateTableDataRecord }] = useTable({
         title: '帐号列表',
         api: pagelist,
@@ -58,15 +77,24 @@
           // slots: { customRender: 'action' },
         },
       });
+
       function handleCreate() {
-        console.log('created');
         openModal(true, {
           isUpdate: false,
         });
       }
-      function handleDelete(record: Recordable) {
-        console.log(record);
+
+      function handleEdit(record: Recordable) {
+        openModal(true, {
+          record,
+          isUpdate: true,
+        });
       }
+
+      function handleDelete(record: Recordable) {
+        remove(record.id);
+      }
+
       function handleSuccess({ isUpdate, values }) {
         if (isUpdate) {
           // 演示不刷新表格直接更新内部数据。
@@ -78,8 +106,8 @@
         }
       }
 
-      function handleSelect(organizationUnitId = '') {
-        searchInfo.organizationUnitId = organizationUnitId;
+      function handleSelect(organizationId = '') {
+        searchInfo.organizationId = organizationId;
         reload();
       }
 
@@ -88,8 +116,10 @@
       }
 
       return {
+        registerModal,
         registerTable,
         handleView,
+        handleEdit,
         handleDelete,
         handleSuccess,
         handleSelect,

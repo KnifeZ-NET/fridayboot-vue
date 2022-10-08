@@ -10,6 +10,12 @@
             :actions="[
               {
                 icon: 'clarity:note-edit-line',
+                tooltip: '编辑',
+                onClick: handleEdit.bind(null, record),
+              },
+              {
+                icon: 'clarity:administrator-line',
+                tooltip: '分配人员',
                 onClick: handleEdit.bind(null, record),
               },
               {
@@ -33,12 +39,15 @@
   import { defineComponent, reactive } from 'vue';
   import { BasicTable, useTable, TableAction } from '/@/components/Table';
   import { columns, searchFormSchema } from './data';
-  import { treeList } from '/@/api/security/admin/organizationUnit';
+  import { treeList, remove } from '/@/api/security/admin/organizationUnit';
   import { useModal } from '/@/components/Modal';
+  import { useMessage } from '/@/hooks/web/useMessage';
   import ModifyModal from './ModifyModal.vue';
   export default defineComponent({
     components: { BasicTable, TableAction, ModifyModal },
     setup() {
+      const { createMessage } = useMessage();
+      const { info } = createMessage;
       const searchInfo = reactive<Recordable>({});
       const [registerModal, { openModal }] = useModal();
       const [registerTable, { reload }] = useTable({
@@ -77,11 +86,13 @@
         });
       }
       function handleDelete(record: Recordable) {
-        console.log(record);
+        remove(record.id);
+        info('删除成功');
+        reload();
       }
 
       function handleSuccess() {
-        debugger;
+        info('操作成功');
         reload();
       }
 

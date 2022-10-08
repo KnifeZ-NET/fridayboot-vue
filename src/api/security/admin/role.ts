@@ -6,12 +6,18 @@ enum Api {
   LIST = '/role/list',
   CREATE = '/role',
   RESTFUL_API = '/role/',
+  ALL = '/role/all',
 }
 
 export function pagelist(query: AppUserPagedQueryRequest) {
   return defHttp.post<BasicFetchResult<AppUserResponse>>({
     url: Api.LIST,
     data: query,
+  });
+}
+export function allRoles() {
+  return defHttp.post<AppUserResponse[]>({
+    url: Api.ALL,
   });
 }
 

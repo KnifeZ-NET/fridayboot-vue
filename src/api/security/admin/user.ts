@@ -6,6 +6,7 @@ enum Api {
   LIST = '/user/list',
   CREATE = '/user',
   RESTFUL_API = '/user/',
+  IsAccountExist = '/user/account-exist/',
 }
 
 export function pagelist(query: AppUserPagedQueryRequest) {
@@ -38,5 +39,11 @@ export function update(user: AppUserReq) {
 export function remove(id: string) {
   defHttp.delete<boolean>({
     url: Api.RESTFUL_API + id,
+  });
+}
+
+export function isAccountExist(account: string) {
+  return defHttp.get<AppUserResponse>({
+    url: Api.IsAccountExist + account,
   });
 }

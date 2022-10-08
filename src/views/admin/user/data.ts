@@ -1,5 +1,6 @@
 import { BasicColumn, FormSchema } from '/@/components/Table';
-import { getAllRoleList, isAccountExist } from '/@/api/demo/system';
+import { isAccountExist } from '/@/api/security/admin/user';
+import { allRoles } from '/@/api/security/admin/role';
 
 export const columns: BasicColumn[] = [
   {
@@ -30,10 +31,16 @@ export const searchFormSchema: FormSchema[] = [
 
 export const accountFormSchema: FormSchema[] = [
   {
-    field: 'account',
+    field: 'username',
     label: '用户名',
     component: 'Input',
-    helpMessage: ['本字段演示异步验证', '不能输入带有admin的用户名'],
+    required: true,
+  },
+  {
+    field: 'account',
+    label: '帐号',
+    component: 'Input',
+    // helpMessage: ['本字段演示异步验证', '不能输入带有admin的用户名'],
     rules: [
       {
         required: true,
@@ -42,11 +49,15 @@ export const accountFormSchema: FormSchema[] = [
       {
         validator(_, value) {
           return new Promise((resolve, reject) => {
-            isAccountExist(value)
-              .then(() => resolve())
-              .catch((err) => {
-                reject(err.message || '验证失败');
-              });
+            if (value === '') {
+              resolve();
+            } else {
+              isAccountExist(value)
+                .then(() => resolve())
+                .catch((err) => {
+                  reject(err.message || '验证失败');
+                });
+            }
           });
         },
       },
@@ -60,23 +71,12 @@ export const accountFormSchema: FormSchema[] = [
     ifShow: false,
   },
   {
-    label: '角色',
-    field: 'role',
-    component: 'ApiSelect',
-    componentProps: {
-      api: getAllRoleList,
-      labelField: 'roleName',
-      valueField: 'roleValue',
-    },
-    required: true,
-  },
-  {
     field: 'dept',
     label: '所属部门',
     component: 'TreeSelect',
     componentProps: {
       fieldNames: {
-        label: 'deptName',
+        label: 'name',
         key: 'id',
         value: 'id',
       },
@@ -84,24 +84,26 @@ export const accountFormSchema: FormSchema[] = [
     },
     required: true,
   },
-
   {
-    field: 'nickname',
-    label: '昵称',
-    component: 'Input',
+    label: '角色',
+    field: 'role',
+    component: 'ApiSelect',
+    componentProps: {
+      api: allRoles,
+      labelField: 'displayName',
+      valueField: 'id',
+    },
     required: true,
   },
-
   {
     label: '邮箱',
     field: 'email',
     component: 'Input',
-    required: true,
   },
 
-  {
-    label: '备注',
-    field: 'remark',
-    component: 'InputTextArea',
-  },
+  // {
+  //   label: '备注',
+  //   field: 'remark',
+  //   component: 'InputTextArea',
+  // },
 ];

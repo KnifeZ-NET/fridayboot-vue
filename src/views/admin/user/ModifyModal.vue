@@ -8,7 +8,7 @@
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { BasicForm, useForm } from '/@/components/Form/index';
   import { accountFormSchema } from './data';
-  import { getDeptList } from '/@/api/demo/system';
+  import { treeList } from '/@/api/security/admin/organizationUnit';
   export default defineComponent({
     name: 'ModifyModal',
     components: { BasicModal, BasicForm },
@@ -35,7 +35,7 @@
             ...data.record,
           });
         }
-        const treeData = await getDeptList();
+        const treeData = await treeList();
         updateSchema([{ field: 'dept', componentProps: { treeData } }]);
       });
 
