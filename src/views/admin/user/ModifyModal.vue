@@ -36,7 +36,8 @@
           });
         }
         const treeData = await treeList();
-        updateSchema([{ field: 'dept', componentProps: { treeData } }]);
+        updateSchema([{ field: 'organizationId', componentProps: { treeData } }]);
+        updateSchema([{ field: 'account', dynamicDisabled: isUpdate }]);
       });
 
       const getTitle = computed(() => (!unref(isUpdate) ? '新增' : '编辑'));

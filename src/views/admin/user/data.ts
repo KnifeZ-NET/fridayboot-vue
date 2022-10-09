@@ -71,7 +71,7 @@ export const accountFormSchema: FormSchema[] = [
     ifShow: false,
   },
   {
-    field: 'dept',
+    field: 'organizationId',
     label: '所属部门',
     component: 'TreeSelect',
     componentProps: {
@@ -86,7 +86,7 @@ export const accountFormSchema: FormSchema[] = [
   },
   {
     label: '角色',
-    field: 'role',
+    field: 'userRoles',
     component: 'ApiSelect',
     componentProps: {
       api: allRoles,

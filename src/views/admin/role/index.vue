@@ -9,29 +9,41 @@
           <TableAction
             :actions="[
               {
-                icon: 'clarity:info-standard-line',
-                tooltip: '查看详情',
-                onClick: handleView.bind(null, record),
+                icon: 'clarity:note-edit-line',
+                tooltip: '编辑',
+                onClick: handleEdit.bind(null, record),
+              },
+              {
+                icon: 'ant-design:delete-outlined',
+                color: 'error',
+                popConfirm: {
+                  title: '是否确认删除',
+                  placement: 'left',
+                  confirm: handleDelete.bind(null, record),
+                },
               },
             ]"
           />
         </template>
       </template>
     </BasicTable>
+    <modify-modal @register="registerModal" @success="handleSuccess" />
   </PageWrapper>
 </template>
 <script lang="ts">
   import { defineComponent, reactive } from 'vue';
   import { PageWrapper } from '/@/components/Page';
   import { BasicTable, useTable, TableAction } from '/@/components/Table';
-  import { useGo } from '/@/hooks/web/usePage';
   import { columns, searchFormSchema } from './data';
-  import { pagelist } from '/@/api/security/admin/role';
+  import { pagelist, remove } from '/@/api/security/admin/role';
+
+  import { useModal } from '/@/components/Modal';
+  import ModifyModal from './ModifyModal.vue';
   export default defineComponent({
-    components: { PageWrapper, BasicTable, TableAction },
+    components: { PageWrapper, BasicTable, TableAction, ModifyModal },
     setup() {
-      const go = useGo();
       const searchInfo = reactive<Recordable>({});
+      const [registerModal, { openModal }] = useModal();
       const [registerTable, { reload, updateTableDataRecord }] = useTable({
         title: '角色列表',
         api: pagelist,
@@ -57,13 +69,21 @@
         },
       });
       function handleCreate() {
-        console.log('created');
-        // openModal(true, {
-        //   isUpdate: false,
-        // });
+        openModal(true, {
+          isUpdate: false,
+        });
       }
+
+      function handleEdit(record: Recordable) {
+        openModal(true, {
+          record,
+          isUpdate: true,
+        });
+      }
+
       function handleDelete(record: Recordable) {
-        console.log(record);
+        remove(record.id);
+        reload();
       }
       function handleSuccess({ isUpdate, values }) {
         if (isUpdate) {
@@ -81,13 +101,10 @@
         reload();
       }
 
-      function handleView(record: Recordable) {
-        go('/admin/role_detail/' + record.id);
-      }
-
       return {
         registerTable,
-        handleView,
+        registerModal,
+        handleEdit,
         handleDelete,
         handleSuccess,
         handleSelect,

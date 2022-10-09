@@ -42,6 +42,13 @@ export interface AppUserResponse {
    * 姓名
    */
   username?: string;
+  /**
+   * 所属部门
+   */
+
+  organizationId?: number;
+
+  userRoles?: string[];
 }
 /**
  * AppUser对象Req，用户

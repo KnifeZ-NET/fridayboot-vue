@@ -43,7 +43,10 @@ export function remove(id: string) {
 }
 
 export function isAccountExist(account: string) {
-  return defHttp.get<AppUserResponse>({
-    url: Api.IsAccountExist + account,
-  });
+  return defHttp.get<AppUserResponse>(
+    {
+      url: Api.IsAccountExist + account,
+    },
+    { errorMessageMode: 'none' },
+  );
 }

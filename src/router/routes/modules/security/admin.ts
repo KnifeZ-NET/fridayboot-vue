@@ -15,6 +15,15 @@ const admin: AppRouteModule = {
   },
   children: [
     {
+      path: 'organization-unit',
+      name: 'DeptManagement',
+      meta: {
+        title: t('routes.demo.system.dept'),
+        ignoreKeepAlive: true,
+      },
+      component: () => import('/@/views/admin/organization-unit/index.vue'),
+    },
+    {
       path: 'user',
       name: 'UserManagement',
       meta: {
@@ -54,15 +63,6 @@ const admin: AppRouteModule = {
         ignoreKeepAlive: true,
       },
       component: () => import('/@/views/demo/system/menu/index.vue'),
-    },
-    {
-      path: 'organization-unit',
-      name: 'DeptManagement',
-      meta: {
-        title: t('routes.demo.system.dept'),
-        ignoreKeepAlive: true,
-      },
-      component: () => import('/@/views/admin/organization-unit/index.vue'),
     },
     {
       path: 'changePassword',
