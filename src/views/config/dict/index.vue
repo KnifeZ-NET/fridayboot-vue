@@ -1,19 +1,13 @@
 <template>
   <PageWrapper dense contentFullHeight fixedHeight contentClass="flex">
-    <OrganizationTree class="w-1/4 xl:w-1/5" @select="handleSelect" />
-    <BasicTable @register="registerTable" :searchInfo="searchInfo" class="w-3/4 xl:w-4/5">
+    <BasicTable @register="registerTable" :searchInfo="searchInfo">
       <template #toolbar>
-        <a-button type="primary" @click="handleCreate">新增账号</a-button>
+        <a-button type="primary" @click="handleCreate">新增字典</a-button>
       </template>
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'action'">
           <TableAction
             :actions="[
-              {
-                icon: 'clarity:info-standard-line',
-                tooltip: '查看用户详情',
-                onClick: handleView.bind(null, record),
-              },
               {
                 icon: 'clarity:note-edit-line',
                 tooltip: '编辑',
@@ -31,34 +25,30 @@
             ]"
           />
         </template>
-        <template v-else-if="column.key === 'locked'">
-          <Switch v-model:checked="record.locked" :disabled="true" />
+        <template v-else-if="column.key === 'isEnabled'">
+          <Switch v-model:checked="record.isEnabled" :disabled="true" />
         </template>
       </template>
     </BasicTable>
-    <ModifyModal @register="registerModal" @success="handleSuccess" />
+    <modify-modal @register="registerModal" @success="handleSuccess" />
   </PageWrapper>
 </template>
 <script lang="ts">
   import { defineComponent, reactive } from 'vue';
   import { PageWrapper } from '/@/components/Page';
   import { BasicTable, useTable, TableAction } from '/@/components/Table';
-  import { useGo } from '/@/hooks/web/usePage';
   import { columns, searchFormSchema } from './data';
-  import OrganizationTree from './OrganizationTree.vue';
-  import { pagelist, remove } from '/@/api/security/admin/user';
-
+  import { pagelist, remove } from '/@/api/security/config/dictionary';
   import { Switch } from 'ant-design-vue';
   import { useModal } from '/@/components/Modal';
   import ModifyModal from './ModifyModal.vue';
   export default defineComponent({
-    components: { PageWrapper, BasicTable, TableAction, OrganizationTree, ModifyModal, Switch },
+    components: { PageWrapper, BasicTable, TableAction, ModifyModal, Switch },
     setup() {
-      const go = useGo();
       const searchInfo = reactive<Recordable>({});
       const [registerModal, { openModal }] = useModal();
       const [registerTable, { reload, updateTableDataRecord }] = useTable({
-        title: '帐号列表',
+        title: '角色列表',
         api: pagelist,
         columns,
         rowKey: 'id',
@@ -81,7 +71,6 @@
           // slots: { customRender: 'action' },
         },
       });
-
       function handleCreate() {
         openModal(true, {
           isUpdate: false,
@@ -97,8 +86,8 @@
 
       function handleDelete(record: Recordable) {
         remove(record.id);
+        reload();
       }
-
       function handleSuccess({ isUpdate, values }) {
         if (isUpdate) {
           // 演示不刷新表格直接更新内部数据。
@@ -110,19 +99,13 @@
         }
       }
 
-      function handleSelect(organizationId = '') {
-        searchInfo.organizationId = organizationId;
+      function handleSelect() {
         reload();
       }
 
-      function handleView(record: Recordable) {
-        go('/admin/user_detail/' + record.id);
-      }
-
       return {
-        registerModal,
         registerTable,
-        handleView,
+        registerModal,
         handleEdit,
         handleDelete,
         handleSuccess,

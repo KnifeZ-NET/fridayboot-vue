@@ -44,7 +44,7 @@
           const values = await validate();
           setModalProps({ confirmLoading: true });
           if (unref(isUpdate)) {
-            update(values);
+            update({ ...values, id: rowId.value });
           } else {
             create(values);
           }

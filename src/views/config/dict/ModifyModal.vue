@@ -4,25 +4,27 @@
   </BasicModal>
 </template>
 <script lang="ts">
-  import { computed, defineComponent, unref, ref } from 'vue';
+  import { computed, defineComponent, ref, unref } from 'vue';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { BasicForm, useForm } from '/@/components/Form/index';
   import { formSchema } from './data';
-  import { treeList, update, create } from '/@/api/security/admin/organizationUnit';
+  import { update, create } from '/@/api/security/config/dictionary';
   export default defineComponent({
     name: 'ModifyModal',
-    components: { BasicForm, BasicModal },
+    components: { BasicModal, BasicForm },
     emits: ['success', 'register'],
     setup(_, { emit }) {
       const isUpdate = ref(true);
       const rowId = ref('');
-      const [registerForm, { resetFields, setFieldsValue, updateSchema, validate }] = useForm({
+      const [registerForm, { setFieldsValue, resetFields, validate }] = useForm({
         labelWidth: 100,
         baseColProps: { span: 24 },
         schemas: formSchema,
         showActionButtonGroup: false,
+        actionColOptions: {
+          span: 23,
+        },
       });
-
       const [registerModal, { setModalProps, closeModal }] = useModalInner(async (data) => {
         resetFields();
         setModalProps({ confirmLoading: false });
@@ -33,14 +35,9 @@
             ...data.record,
           });
         }
-        const treeData = await treeList();
-        updateSchema({
-          field: 'parentId',
-          componentProps: { treeData },
-        });
       });
 
-      const getTitle = computed(() => (!unref(isUpdate) ? '新增部门' : '编辑部门'));
+      const getTitle = computed(() => (!unref(isUpdate) ? '新增' : '编辑'));
 
       async function handleSubmit() {
         try {

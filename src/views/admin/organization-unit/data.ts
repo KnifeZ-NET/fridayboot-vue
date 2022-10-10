@@ -34,12 +34,6 @@ export const searchFormSchema: FormSchema[] = [
 
 export const formSchema: FormSchema[] = [
   {
-    field: 'id',
-    label: '部门id',
-    component: 'Input',
-    show: false,
-  },
-  {
     field: 'name',
     label: '部门名称',
     component: 'Input',
@@ -55,7 +49,6 @@ export const formSchema: FormSchema[] = [
     field: 'parentId',
     label: '上级部门',
     component: 'TreeSelect',
-
     componentProps: {
       fieldNames: {
         label: 'name',

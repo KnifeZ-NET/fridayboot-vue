@@ -41,19 +41,17 @@
   import { columns, searchFormSchema } from './data';
   import { treeList, remove } from '/@/api/security/admin/organizationUnit';
   import { useModal } from '/@/components/Modal';
-  import { useMessage } from '/@/hooks/web/useMessage';
   import ModifyModal from './ModifyModal.vue';
   export default defineComponent({
     components: { BasicTable, TableAction, ModifyModal },
     setup() {
-      const { createMessage } = useMessage();
-      const { info } = createMessage;
       const searchInfo = reactive<Recordable>({});
       const [registerModal, { openModal }] = useModal();
-      const [registerTable, { reload }] = useTable({
+      const [registerTable, { reload, updateTableDataRecord }] = useTable({
         title: '部门列表',
         api: treeList,
         columns,
+        rowKey: 'id',
         formConfig: {
           labelWidth: 120,
           schemas: searchFormSchema,
@@ -74,7 +72,6 @@
         },
       });
       function handleCreate() {
-        console.log('created');
         openModal(true, {
           isUpdate: false,
         });
@@ -87,13 +84,18 @@
       }
       function handleDelete(record: Recordable) {
         remove(record.id);
-        info('删除成功');
         reload();
       }
 
-      function handleSuccess() {
-        info('操作成功');
-        reload();
+      function handleSuccess({ isUpdate, values }) {
+        if (isUpdate) {
+          // 演示不刷新表格直接更新内部数据。
+          // 注意：updateTableDataRecord要求表格的rowKey属性为string并且存在于每一行的record的keys中
+          const result = updateTableDataRecord(values.id, values);
+          console.log(result);
+        } else {
+          reload();
+        }
       }
 
       function handleSelect(deptId = '') {
