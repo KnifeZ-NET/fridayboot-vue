@@ -22,6 +22,11 @@
                   confirm: handleDelete.bind(null, record),
                 },
               },
+              {
+                icon: 'clarity:wrench-line',
+                tooltip: '字典配置',
+                onClick: handleConfig.bind(null, record),
+              },
             ]"
           />
         </template>
@@ -31,6 +36,7 @@
       </template>
     </BasicTable>
     <modify-modal @register="registerModal" @success="handleSuccess" />
+    <dictionary-config-modal @register="registerConfigModal" />
   </PageWrapper>
 </template>
 <script lang="ts">
@@ -42,11 +48,20 @@
   import { Switch } from 'ant-design-vue';
   import { useModal } from '/@/components/Modal';
   import ModifyModal from './ModifyModal.vue';
+  import DictionaryConfigModal from './DictionaryConfigModal.vue';
   export default defineComponent({
-    components: { PageWrapper, BasicTable, TableAction, ModifyModal, Switch },
+    components: {
+      PageWrapper,
+      BasicTable,
+      TableAction,
+      ModifyModal,
+      DictionaryConfigModal,
+      Switch,
+    },
     setup() {
       const searchInfo = reactive<Recordable>({});
       const [registerModal, { openModal }] = useModal();
+      const [registerConfigModal, { openModal: openConfigModal }] = useModal();
       const [registerTable, { reload, updateTableDataRecord }] = useTable({
         title: '角色列表',
         api: pagelist,
@@ -84,6 +99,12 @@
         });
       }
 
+      function handleConfig(record: Recordable) {
+        openConfigModal(true, {
+          record,
+        });
+      }
+
       function handleDelete(record: Recordable) {
         remove(record.id);
         reload();
@@ -106,11 +127,13 @@
       return {
         registerTable,
         registerModal,
+        registerConfigModal,
         handleEdit,
         handleDelete,
         handleSuccess,
         handleSelect,
         handleCreate,
+        handleConfig,
         searchInfo,
       };
     },

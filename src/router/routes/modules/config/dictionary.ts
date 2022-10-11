@@ -9,7 +9,7 @@ const dictionary: AppRouteModule = {
   component: LAYOUT,
   meta: {
     orderNo: 2000,
-    icon: 'ion:settings-outline',
+    icon: 'clarity:slider-line',
     title: t('routes.menu.config.moduleName'),
   },
   children: [
