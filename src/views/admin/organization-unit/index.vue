@@ -39,7 +39,7 @@
   import { defineComponent, reactive } from 'vue';
   import { BasicTable, useTable, TableAction } from '/@/components/Table';
   import { columns, searchFormSchema } from './data';
-  import { treeList, remove } from '/@/api/security/admin/organizationUnit';
+  import { organizationTreeList, remove } from '/@/api/security/admin/organizationUnit';
   import { useModal } from '/@/components/Modal';
   import ModifyModal from './ModifyModal.vue';
   export default defineComponent({
@@ -49,7 +49,7 @@
       const [registerModal, { openModal }] = useModal();
       const [registerTable, { reload, updateTableDataRecord }] = useTable({
         title: '部门列表',
-        api: treeList,
+        api: organizationTreeList,
         columns,
         rowKey: 'id',
         formConfig: {
@@ -89,10 +89,7 @@
 
       function handleSuccess({ isUpdate, values }) {
         if (isUpdate) {
-          // 演示不刷新表格直接更新内部数据。
-          // 注意：updateTableDataRecord要求表格的rowKey属性为string并且存在于每一行的record的keys中
-          const result = updateTableDataRecord(values.id, values);
-          console.log(result);
+          updateTableDataRecord(values.id, values);
         } else {
           reload();
         }

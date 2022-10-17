@@ -8,7 +8,7 @@
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { BasicForm, useForm } from '/@/components/Form/index';
   import { formSchema } from './data';
-  import { treeList, update, create } from '/@/api/security/admin/organizationUnit';
+  import { organizationTreeList, update, create } from '/@/api/security/admin/organizationUnit';
   export default defineComponent({
     name: 'ModifyModal',
     components: { BasicForm, BasicModal },
@@ -33,7 +33,7 @@
             ...data.record,
           });
         }
-        const treeData = await treeList();
+        const treeData = await organizationTreeList({});
         updateSchema({
           field: 'parentId',
           componentProps: { treeData },

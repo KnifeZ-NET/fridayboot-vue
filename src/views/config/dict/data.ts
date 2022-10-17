@@ -99,13 +99,13 @@ export const configColumns: BasicColumn[] = [
     width: 120,
   },
   {
-    title: '数据类型',
-    dataIndex: 'valueType',
+    title: '是否启用',
+    dataIndex: 'enabled',
     width: 120,
   },
   {
-    title: '是否启用',
-    dataIndex: 'enabled',
+    title: '数据类型',
+    dataIndex: 'valueType',
     width: 120,
   },
   {

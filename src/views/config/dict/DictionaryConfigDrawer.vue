@@ -69,6 +69,7 @@
         bordered: true,
         showTableSetting: true,
         useSearchForm: false,
+        pagination: false,
         actionColumn: {
           width: 120,
           title: '操作',
@@ -92,7 +93,6 @@
       function handleEdit(record: Recordable) {
         openModal(true, {
           record,
-          dictCode: rowCode.value,
           isUpdate: true,
         });
       }
@@ -101,8 +101,10 @@
         remove(record.id);
         reload();
       }
-      async function handleSuccess() {
+      function handleSuccess() {
+        setDrawerProps({ confirmLoading: true });
         reload();
+        setDrawerProps({ confirmLoading: false });
       }
       return {
         registerDrawer,

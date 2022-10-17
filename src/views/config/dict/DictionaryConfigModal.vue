@@ -16,6 +16,7 @@
     setup(_, { emit }) {
       const isUpdate = ref(true);
       const rowId = ref('');
+      const dictCode = ref('');
       const [registerForm, { setFieldsValue, resetFields, validate }] = useForm({
         labelWidth: 100,
         baseColProps: { span: 24 },
@@ -34,6 +35,8 @@
           setFieldsValue({
             ...data.record,
           });
+        } else {
+          dictCode.value = data.dictCode;
         }
       });
 
@@ -46,10 +49,10 @@
           if (unref(isUpdate)) {
             update({ ...values, id: rowId.value });
           } else {
-            create(values);
+            create({ ...values, dictCode: dictCode.value });
           }
           closeModal();
-          emit('success', { isUpdate: unref(isUpdate), values: { ...values, id: rowId.value } });
+          emit('success');
         } finally {
           setModalProps({ confirmLoading: false });
         }
