@@ -1,4 +1,3 @@
-import { BasicFetchResult } from '../../model/baseModel';
 import {
   AppOrganizationUnitQueryRequest,
   AppOrganizationUnit,
@@ -12,8 +11,8 @@ enum Api {
   RESTFUL_API = '/organization-unit/',
 }
 
-export function treeList(query: AppOrganizationUnitQueryRequest) {
-  return defHttp.post<BasicFetchResult<TreeItem>>({
+export function organizationTreeList(query: AppOrganizationUnitQueryRequest) {
+  return defHttp.post<TreeItem[]>({
     url: Api.TREE_LIST,
     data: query,
   });

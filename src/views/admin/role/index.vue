@@ -35,7 +35,7 @@
   import { PageWrapper } from '/@/components/Page';
   import { BasicTable, useTable, TableAction } from '/@/components/Table';
   import { columns, searchFormSchema } from './data';
-  import { pagelist, remove } from '/@/api/security/admin/role';
+  import { roleList, remove } from '/@/api/security/admin/role';
 
   import { useModal } from '/@/components/Modal';
   import ModifyModal from './ModifyModal.vue';
@@ -46,7 +46,7 @@
       const [registerModal, { openModal }] = useModal();
       const [registerTable, { reload, updateTableDataRecord }] = useTable({
         title: '角色列表',
-        api: pagelist,
+        api: roleList,
         columns,
         rowKey: 'id',
         formConfig: {

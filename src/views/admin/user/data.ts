@@ -40,7 +40,6 @@ export const accountFormSchema: FormSchema[] = [
     field: 'account',
     label: '帐号',
     component: 'Input',
-    // helpMessage: ['本字段演示异步验证', '不能输入带有admin的用户名'],
     rules: [
       {
         required: true,
@@ -64,7 +63,7 @@ export const accountFormSchema: FormSchema[] = [
     ],
   },
   {
-    field: 'pwd',
+    field: 'password',
     label: '密码',
     component: 'InputPassword',
     required: true,

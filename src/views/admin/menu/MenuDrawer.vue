@@ -43,7 +43,7 @@
             ...data.record,
           });
         }
-        const treeData = await treeList();
+        const treeData = await treeList({});
         updateSchema({
           field: 'parentId',
           componentProps: { treeData },

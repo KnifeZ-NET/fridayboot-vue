@@ -1,34 +1,34 @@
 import { BasicFetchResult } from '../../model/baseModel';
-import { AppDictionary, AppDictionaryQueryRequest } from './model/dictionaryModel';
+import { AppDictionaryConfig } from './model/dictionaryConfigModel';
 import { defHttp } from '/@/utils/http/axios';
 
 enum Api {
-  LIST = '/dictionary/list',
-  CREATE = '/dictionary',
-  RESTFUL_API = '/dictionary/',
+  LIST = '/dictionary-config/list/',
+  CREATE = '/dictionary-config',
+  RESTFUL_API = '/dictionary-config/',
 }
 
-export function dictionaryList(query: AppDictionaryQueryRequest) {
-  return defHttp.post<BasicFetchResult<AppDictionary>>({
-    url: Api.LIST,
+export function pageListByDictCode(query: any) {
+  return defHttp.post<BasicFetchResult<AppDictionaryConfig>>({
+    url: Api.LIST + query.dictCode,
     data: query,
   });
 }
 
 export function getById(id: string) {
-  return defHttp.get<AppDictionary>({
+  return defHttp.get<AppDictionaryConfig>({
     url: Api.RESTFUL_API + id,
   });
 }
 
-export function create(model: AppDictionary) {
+export function create(model: AppDictionaryConfig) {
   return defHttp.post<boolean>({
     url: Api.CREATE,
     data: model,
   });
 }
 
-export function update(model: AppDictionary) {
+export function update(model: AppDictionaryConfig) {
   defHttp.post<boolean>({
     url: Api.RESTFUL_API + model.id,
     data: model,

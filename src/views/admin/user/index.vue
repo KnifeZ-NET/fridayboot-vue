@@ -9,11 +9,11 @@
         <template v-if="column.key === 'action'">
           <TableAction
             :actions="[
-              {
-                icon: 'clarity:info-standard-line',
-                tooltip: '查看用户详情',
-                onClick: handleView.bind(null, record),
-              },
+              // {
+              //   icon: 'clarity:info-standard-line',
+              //   tooltip: '查看用户详情',
+              //   onClick: handleView.bind(null, record),
+              // },
               {
                 icon: 'clarity:note-edit-line',
                 tooltip: '编辑',
@@ -46,7 +46,7 @@
   import { useGo } from '/@/hooks/web/usePage';
   import { columns, searchFormSchema } from './data';
   import OrganizationTree from './OrganizationTree.vue';
-  import { pagelist, remove } from '/@/api/security/admin/user';
+  import { userList, remove } from '/@/api/security/admin/user';
 
   import { Switch } from 'ant-design-vue';
   import { useModal } from '/@/components/Modal';
@@ -59,7 +59,7 @@
       const [registerModal, { openModal }] = useModal();
       const [registerTable, { reload, updateTableDataRecord }] = useTable({
         title: '帐号列表',
-        api: pagelist,
+        api: userList,
         columns,
         rowKey: 'id',
         formConfig: {
@@ -70,15 +70,10 @@
         bordered: true,
         showTableSetting: true,
         useSearchForm: true,
-        handleSearchInfoFn(info) {
-          console.log('handleSearchInfoFn', info);
-          return info;
-        },
         actionColumn: {
           width: 120,
           title: '操作',
           dataIndex: 'action',
-          // slots: { customRender: 'action' },
         },
       });
 
@@ -103,8 +98,7 @@
         if (isUpdate) {
           // 演示不刷新表格直接更新内部数据。
           // 注意：updateTableDataRecord要求表格的rowKey属性为string并且存在于每一行的record的keys中
-          const result = updateTableDataRecord(values.id, values);
-          console.log(result);
+          updateTableDataRecord(values.id, values);
         } else {
           reload();
         }

@@ -8,7 +8,8 @@
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { BasicForm, useForm } from '/@/components/Form/index';
   import { accountFormSchema } from './data';
-  import { treeList } from '/@/api/security/admin/organizationUnit';
+  import { organizationTreeList } from '/@/api/security/admin/organizationUnit';
+  import { isAccountExist } from '/@/api/security/admin/user';
   export default defineComponent({
     name: 'ModifyModal',
     components: { BasicModal, BasicForm },
@@ -30,14 +31,42 @@
         setModalProps({ confirmLoading: false });
         isUpdate.value = !!data?.isUpdate;
         if (unref(isUpdate)) {
+          updateSchema([{ field: 'account', dynamicDisabled: isUpdate.value, rules: [] }]);
           rowId.value = data.record.id;
           setFieldsValue({
             ...data.record,
           });
+        } else {
+          updateSchema([
+            {
+              field: 'account',
+              dynamicDisabled: isUpdate.value,
+              rules: [
+                {
+                  required: true,
+                  message: '请输入用户名',
+                },
+                {
+                  validator(_, value) {
+                    return new Promise((resolve, reject) => {
+                      if (value === '') {
+                        resolve();
+                      } else {
+                        isAccountExist(value)
+                          .then(() => resolve())
+                          .catch((err) => {
+                            reject(err.message || '验证失败');
+                          });
+                      }
+                    });
+                  },
+                },
+              ],
+            },
+          ]);
         }
-        const treeData = await treeList();
+        const treeData = await organizationTreeList({});
         updateSchema([{ field: 'organizationId', componentProps: { treeData } }]);
-        updateSchema([{ field: 'account', dynamicDisabled: isUpdate }]);
       });
 
       const getTitle = computed(() => (!unref(isUpdate) ? '新增' : '编辑'));

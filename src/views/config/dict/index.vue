@@ -30,13 +30,13 @@
             ]"
           />
         </template>
-        <template v-else-if="column.key === 'isEnabled'">
-          <Switch v-model:checked="record.isEnabled" :disabled="true" />
+        <template v-else-if="column.key === 'enabled'">
+          <Switch v-model:checked="record.enabled" :disabled="true" />
         </template>
       </template>
     </BasicTable>
     <modify-modal @register="registerModal" @success="handleSuccess" />
-    <dictionary-config-modal @register="registerConfigModal" />
+    <dictionary-config-drawer @register="registerDrawer" />
   </PageWrapper>
 </template>
 <script lang="ts">
@@ -44,27 +44,28 @@
   import { PageWrapper } from '/@/components/Page';
   import { BasicTable, useTable, TableAction } from '/@/components/Table';
   import { columns, searchFormSchema } from './data';
-  import { pagelist, remove } from '/@/api/security/config/dictionary';
+  import { dictionaryList, remove } from '/@/api/security/config/dictionary';
   import { Switch } from 'ant-design-vue';
   import { useModal } from '/@/components/Modal';
   import ModifyModal from './ModifyModal.vue';
-  import DictionaryConfigModal from './DictionaryConfigModal.vue';
+  import DictionaryConfigDrawer from './DictionaryConfigDrawer.vue';
+  import { useDrawer } from '/@/components/Drawer';
   export default defineComponent({
     components: {
       PageWrapper,
       BasicTable,
       TableAction,
       ModifyModal,
-      DictionaryConfigModal,
+      DictionaryConfigDrawer,
       Switch,
     },
     setup() {
       const searchInfo = reactive<Recordable>({});
       const [registerModal, { openModal }] = useModal();
-      const [registerConfigModal, { openModal: openConfigModal }] = useModal();
+      const [registerDrawer, { openDrawer }] = useDrawer();
       const [registerTable, { reload, updateTableDataRecord }] = useTable({
-        title: '角色列表',
-        api: pagelist,
+        title: '字典列表',
+        api: dictionaryList,
         columns,
         rowKey: 'id',
         formConfig: {
@@ -100,7 +101,7 @@
       }
 
       function handleConfig(record: Recordable) {
-        openConfigModal(true, {
+        openDrawer(true, {
           record,
         });
       }
@@ -127,7 +128,7 @@
       return {
         registerTable,
         registerModal,
-        registerConfigModal,
+        registerDrawer,
         handleEdit,
         handleDelete,
         handleSuccess,

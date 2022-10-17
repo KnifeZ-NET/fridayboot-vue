@@ -9,7 +9,7 @@ enum Api {
   IsAccountExist = '/user/account-exist/',
 }
 
-export function pagelist(query: AppUserPagedQueryRequest) {
+export function userList(query: AppUserPagedQueryRequest) {
   return defHttp.post<BasicFetchResult<AppUserResponse>>({
     url: Api.LIST,
     data: query,

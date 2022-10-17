@@ -15,7 +15,7 @@
   import { defineComponent, onMounted, ref } from 'vue';
 
   import { BasicTree, TreeItem } from '/@/components/Tree';
-  import { treeList } from '/@/api/security/admin/organizationUnit';
+  import { organizationTreeList } from '/@/api/security/admin/organizationUnit';
 
   export default defineComponent({
     name: 'OrganizationTree',
@@ -26,7 +26,7 @@
       const treeData = ref<TreeItem[]>([]);
 
       async function fetch() {
-        treeData.value = await treeList({
+        treeData.value = await organizationTreeList({
           name: '',
           unitCode: '',
         });

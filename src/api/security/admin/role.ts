@@ -9,7 +9,7 @@ enum Api {
   ALL = '/role/all',
 }
 
-export function pagelist(query: AppUserPagedQueryRequest) {
+export function roleList(query: AppUserPagedQueryRequest) {
   return defHttp.post<BasicFetchResult<AppUserResponse>>({
     url: Api.LIST,
     data: query,
