@@ -25,11 +25,15 @@ export interface AppDictionaryConfig {
   /**
    * 是否启用
    */
-  isEnabled?: boolean;
+  enabled?: boolean;
   /**
    * 标签等级
    */
   labelLevel?: string;
+  /**
+   * 图标
+   */
+  icon?: string;
   /**
    * 名字
    */

@@ -35,13 +35,11 @@ export const columns: BasicColumn[] = [
   },
   {
     title: '状态',
-    dataIndex: 'isEnabled',
+    dataIndex: 'enabled',
     width: 80,
     customRender: ({ record }) => {
-      const status = record.status;
-      const enable = ~~status === 0;
-      const color = enable ? 'green' : 'red';
-      const text = enable ? '启用' : '停用';
+      const color = record.enabled ? 'green' : 'red';
+      const text = record.enabled ? '启用' : '停用';
       return h(Tag, { color: color }, () => text);
     },
   },
