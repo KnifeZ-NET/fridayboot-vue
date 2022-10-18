@@ -42,6 +42,12 @@ export function remove(id: string) {
   });
 }
 
+export function getUserRoles(id: string) {
+  return defHttp.get<AppUserResponse>({
+    url: Api.RESTFUL_API + id + '/roles',
+  });
+}
+
 export function isAccountExist(account: string) {
   return defHttp.get<AppUserResponse>(
     {

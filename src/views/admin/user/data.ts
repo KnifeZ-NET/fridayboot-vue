@@ -85,14 +85,14 @@ export const accountFormSchema: FormSchema[] = [
   },
   {
     label: '角色',
-    field: 'userRoles',
+    field: 'roles',
     component: 'ApiSelect',
     componentProps: {
       api: allRoles,
       labelField: 'displayName',
       valueField: 'id',
+      mode: 'multiple',
     },
-    required: true,
   },
   {
     label: '邮箱',

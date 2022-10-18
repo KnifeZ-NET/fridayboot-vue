@@ -9,7 +9,7 @@
   import { BasicForm, useForm } from '/@/components/Form/index';
   import { accountFormSchema } from './data';
   import { organizationTreeList } from '/@/api/security/admin/organizationUnit';
-  import { isAccountExist } from '/@/api/security/admin/user';
+  import { isAccountExist, getUserRoles, create, update } from '/@/api/security/admin/user';
   export default defineComponent({
     name: 'ModifyModal',
     components: { BasicModal, BasicForm },
@@ -33,6 +33,8 @@
         if (unref(isUpdate)) {
           updateSchema([{ field: 'account', dynamicDisabled: isUpdate.value, rules: [] }]);
           rowId.value = data.record.id;
+          data.record.roles = await getUserRoles(rowId.value);
+          console.log(data.record.roles);
           setFieldsValue({
             ...data.record,
           });
@@ -75,7 +77,11 @@
         try {
           const values = await validate();
           setModalProps({ confirmLoading: true });
-          console.log(values);
+          if (unref(isUpdate)) {
+            update({ ...values, id: rowId.value });
+          } else {
+            create(values);
+          }
           closeModal();
           emit('success', { isUpdate: unref(isUpdate), values: { ...values, id: rowId.value } });
         } finally {
