@@ -66,7 +66,6 @@ export const accountFormSchema: FormSchema[] = [
     field: 'password',
     label: '密码',
     component: 'InputPassword',
-    required: true,
     ifShow: false,
   },
   {
@@ -98,6 +97,12 @@ export const accountFormSchema: FormSchema[] = [
     label: '邮箱',
     field: 'email',
     component: 'Input',
+  },
+  {
+    label: '锁定',
+    field: 'locked',
+    component: 'Switch',
+    defaultValue: false,
   },
 
   // {

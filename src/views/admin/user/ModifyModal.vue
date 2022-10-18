@@ -31,6 +31,7 @@
         setModalProps({ confirmLoading: false });
         isUpdate.value = !!data?.isUpdate;
         if (unref(isUpdate)) {
+          updateSchema([{ field: 'password', ifShow: false }]);
           updateSchema([{ field: 'account', dynamicDisabled: isUpdate.value, rules: [] }]);
           rowId.value = data.record.id;
           data.record.roles = await getUserRoles(rowId.value);
@@ -39,6 +40,7 @@
             ...data.record,
           });
         } else {
+          updateSchema([{ field: 'password', ifShow: true }]);
           updateSchema([
             {
               field: 'account',
