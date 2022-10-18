@@ -33,7 +33,7 @@
   import { defineComponent, nextTick } from 'vue';
 
   import { BasicTable, useTable, TableAction } from '/@/components/Table';
-  import { treeList } from '/@/api/security/admin/menu';
+  import { menuTreeList } from '/@/api/security/admin/menu';
 
   import { useDrawer } from '/@/components/Drawer';
   import MenuDrawer from './MenuDrawer.vue';
@@ -47,7 +47,7 @@
       const [registerDrawer, { openDrawer }] = useDrawer();
       const [registerTable, { reload, expandAll }] = useTable({
         title: '菜单列表',
-        api: treeList,
+        api: menuTreeList,
         columns,
         formConfig: {
           labelWidth: 120,

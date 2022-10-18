@@ -1,4 +1,3 @@
-import { BasicFetchResult } from '../../model/baseModel';
 import { AppMenu, AppMenuQueryRequest } from './model/menuModel';
 import { TreeItem } from '/@/components/Tree';
 import { defHttp } from '/@/utils/http/axios';
@@ -7,13 +6,24 @@ enum Api {
   TREE_LIST = '/menu/tree-list',
   CREATE = '/menu',
   RESTFUL_API = '/menu/',
+  PERMISSION_LIST = '/v3/api-docs?group=v1.x',
 }
 
-export function treeList(query: AppMenuQueryRequest) {
-  return defHttp.post<BasicFetchResult<TreeItem>>({
+export function menuTreeList(query: AppMenuQueryRequest) {
+  return defHttp.post<TreeItem[]>({
     url: Api.TREE_LIST,
     data: query,
   });
+}
+
+export function getMenuPermissionList() {
+  return defHttp.get<any>(
+    { url: Api.PERMISSION_LIST },
+    {
+      urlPrefix: '',
+      isReturnNativeResponse: true,
+    },
+  );
 }
 
 export function getById(id: string) {

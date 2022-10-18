@@ -16,7 +16,9 @@
   import { formSchema } from './menu.data';
   import { BasicDrawer, useDrawerInner } from '/@/components/Drawer';
 
-  import { treeList, update, create } from '/@/api/security/admin/menu';
+  import { menuTreeList, update, create, getMenuPermissionList } from '/@/api/security/admin/menu';
+  import { TreeItem } from '/@/components/Tree';
+  import { method } from 'lodash';
 
   export default defineComponent({
     name: 'MenuDrawer',
@@ -25,6 +27,7 @@
     setup(_, { emit }) {
       const isUpdate = ref(true);
       const rowId = ref('');
+      const permissionTreeData = ref<TreeItem[]>([]);
       const [registerForm, { resetFields, setFieldsValue, updateSchema, validate }] = useForm({
         labelWidth: 100,
         schemas: formSchema,
@@ -43,10 +46,37 @@
             ...data.record,
           });
         }
-        const treeData = await treeList({});
+        const treeData = await menuTreeList({});
+        const menuPermissionData = await getMenuPermissionList();
+        const tempTrees: any = [];
+        var paths = menuPermissionData.data.paths;
+        menuPermissionData.data.tags.forEach((tag) => {
+          var node = {
+            id: tag.name,
+            name: tag.name,
+            children: [],
+          };
+          for (var path in paths) {
+            var methods = paths[path];
+            for (var action in methods) {
+              if (methods[action].tags.indexOf(tag.name) > -1) {
+                node.children.push({
+                  id: path + ':' + action,
+                  name: methods[action].summary,
+                } as never);
+              }
+            }
+          }
+          tempTrees.push(node);
+        });
+        permissionTreeData.value = tempTrees;
         updateSchema({
           field: 'parentId',
           componentProps: { treeData },
+        });
+        updateSchema({
+          field: 'permission',
+          componentProps: { treeData: permissionTreeData },
         });
       });
 
