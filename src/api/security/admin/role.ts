@@ -21,6 +21,11 @@ export function allRoles() {
   });
 }
 
+export function getPermissionMenusById(id: string) {
+  return defHttp.get<AppUserResponse>({
+    url: Api.RESTFUL_API + id + '/permission-list',
+  });
+}
 export function getById(id: string) {
   return defHttp.get<AppUserResponse>({
     url: Api.RESTFUL_API + id,

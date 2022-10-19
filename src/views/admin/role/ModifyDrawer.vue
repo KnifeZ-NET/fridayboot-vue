@@ -8,11 +8,11 @@
     @ok="handleSubmit"
   >
     <BasicForm @register="registerForm">
-      <template #menu="{ model, field }">
+      <template #permissions="{ model, field }">
         <BasicTree
           v-model:value="model[field]"
           :treeData="treeData"
-          :fieldNames="{ title: 'menuName', key: 'id' }"
+          :fieldNames="{ title: 'name', key: 'id' }"
           checkable
           toolbar
           title="菜单分配"
@@ -27,7 +27,7 @@
   import { formSchema } from './data';
   import { BasicDrawer, useDrawerInner } from '/@/components/Drawer';
   import { BasicTree, TreeItem } from '/@/components/Tree';
-  import { update, create } from '/@/api/security/admin/role';
+  import { update, create, getPermissionMenusById } from '/@/api/security/admin/role';
 
   import { menuTreeList } from '/@/api/security/admin/menu';
 
@@ -52,12 +52,14 @@
         setDrawerProps({ confirmLoading: false });
         // 需要在setFieldsValue之前先填充treeData，否则Tree组件可能会报key not exist警告
         if (unref(treeData).length === 0) {
-          treeData.value = await menuTreeList({});
+          treeData.value = await menuTreeList({ enabled: true });
         }
         isUpdate.value = !!data?.isUpdate;
 
         if (unref(isUpdate)) {
           rowId.value = data.record.id;
+          var selectMenus = await getPermissionMenusById(data.record.name);
+          data.record.permissions = selectMenus;
           setFieldsValue({
             ...data.record,
           });

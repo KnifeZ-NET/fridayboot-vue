@@ -52,4 +52,10 @@ export const formSchema: FormSchema[] = [
     field: 'description',
     component: 'InputTextArea',
   },
+  {
+    label: ' ',
+    field: 'permissions',
+    slot: 'permissions',
+    component: 'Input',
+  },
 ];

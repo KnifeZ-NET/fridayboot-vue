@@ -27,7 +27,7 @@
         </template>
       </template>
     </BasicTable>
-    <modify-modal @register="registerModal" @success="handleSuccess" />
+    <modify-drawer @register="registerDrawer" @success="handleSuccess" />
   </PageWrapper>
 </template>
 <script lang="ts">
@@ -37,13 +37,13 @@
   import { columns, searchFormSchema } from './data';
   import { roleList, remove } from '/@/api/security/admin/role';
 
-  import { useModal } from '/@/components/Modal';
-  import ModifyModal from './ModifyModal.vue';
+  import { useDrawer } from '/@/components/Drawer';
+  import ModifyDrawer from './ModifyDrawer.vue';
   export default defineComponent({
-    components: { PageWrapper, BasicTable, TableAction, ModifyModal },
+    components: { PageWrapper, BasicTable, TableAction, ModifyDrawer },
     setup() {
       const searchInfo = reactive<Recordable>({});
-      const [registerModal, { openModal }] = useModal();
+      const [registerDrawer, { openDrawer }] = useDrawer();
       const [registerTable, { reload, updateTableDataRecord }] = useTable({
         title: '角色列表',
         api: roleList,
@@ -69,13 +69,13 @@
         },
       });
       function handleCreate() {
-        openModal(true, {
+        openDrawer(true, {
           isUpdate: false,
         });
       }
 
       function handleEdit(record: Recordable) {
-        openModal(true, {
+        openDrawer(true, {
           record,
           isUpdate: true,
         });
@@ -102,7 +102,7 @@
 
       return {
         registerTable,
-        registerModal,
+        registerDrawer,
         handleEdit,
         handleDelete,
         handleSuccess,
