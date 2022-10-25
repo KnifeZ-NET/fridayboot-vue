@@ -57,7 +57,7 @@ export interface AppMenu {
   /**
    * 菜单类型
    */
-  type?: string;
+  type?: number;
   /**
    * 修改人
    */
@@ -76,6 +76,10 @@ export interface AppMenuQueryRequest {
    * 状态
    */
   enabled?: boolean;
+  /**
+   * 是否包含按钮
+   */
+  includeButton?: boolean;
   /**
    * 名称
    */

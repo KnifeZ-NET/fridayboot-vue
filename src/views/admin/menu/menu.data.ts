@@ -20,17 +20,18 @@ export const columns: BasicColumn[] = [
     },
   },
   {
-    title: '权限标识',
-    dataIndex: 'permission',
-  },
-  {
-    title: '组件',
-    dataIndex: 'component',
+    title: '菜单标识',
+    dataIndex: 'route',
+    width: 120,
   },
   {
     title: '排序',
     dataIndex: 'sort',
     width: 50,
+  },
+  {
+    title: '组件',
+    dataIndex: 'component',
   },
   {
     title: '状态',
@@ -49,9 +50,9 @@ export const columns: BasicColumn[] = [
   },
 ];
 
-const isDir = (type: string) => type === '0';
-const isMenu = (type: string) => type === '1';
-const isButton = (type: string) => type === '2';
+const isDir = (type: number) => type === 0;
+const isMenu = (type: number) => type === 1;
+const isButton = (type: number) => type === 2;
 
 export const searchFormSchema: FormSchema[] = [
   {
@@ -72,6 +73,20 @@ export const searchFormSchema: FormSchema[] = [
     },
     colProps: { span: 8 },
   },
+  {
+    field: 'includeButton',
+    label: '状态',
+    ifShow: false,
+    defaultValue: true,
+    component: 'Select',
+    componentProps: {
+      options: [
+        { label: '包含', value: true },
+        { label: '不包含', value: false },
+      ],
+    },
+    colProps: { span: 8 },
+  },
 ];
 
 export const formSchema: FormSchema[] = [
@@ -79,12 +94,12 @@ export const formSchema: FormSchema[] = [
     field: 'type',
     label: '菜单类型',
     component: 'RadioButtonGroup',
-    defaultValue: '0',
+    defaultValue: 0,
     componentProps: {
       options: [
-        { label: '目录', value: '0' },
-        { label: '菜单', value: '1' },
-        { label: '按钮', value: '2' },
+        { label: '目录', value: 0 },
+        { label: '菜单', value: 1 },
+        { label: '按钮', value: 2 },
       ],
     },
     colProps: { lg: 24, md: 24 },
@@ -95,7 +110,12 @@ export const formSchema: FormSchema[] = [
     component: 'Input',
     required: true,
   },
-
+  {
+    field: 'route',
+    label: '菜单标识',
+    component: 'Input',
+    required: true,
+  },
   {
     field: 'parentId',
     label: '上级菜单',
@@ -114,13 +134,11 @@ export const formSchema: FormSchema[] = [
     field: 'sort',
     label: '排序',
     component: 'InputNumber',
-    required: true,
   },
   {
     field: 'icon',
     label: '图标',
     component: 'IconPicker',
-    required: true,
     ifShow: ({ values }) => !isButton(values.type),
   },
 

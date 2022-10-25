@@ -46,7 +46,7 @@
             ...data.record,
           });
         }
-        const treeData = await menuTreeList({});
+        const treeData = await menuTreeList({ includeButton: false });
         const menuPermissionData = await getMenuPermissionList();
         const tempTrees: any = [];
         var paths = menuPermissionData.data.paths;

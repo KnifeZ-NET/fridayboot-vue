@@ -27,6 +27,18 @@ export const searchFormSchema: FormSchema[] = [
     component: 'Input',
     colProps: { span: 8 },
   },
+  {
+    field: 'locked',
+    label: '状态',
+    component: 'Select',
+    componentProps: {
+      options: [
+        { label: '锁定', value: true },
+        { label: '启用', value: false },
+      ],
+    },
+    colProps: { span: 8 },
+  },
 ];
 
 export const accountFormSchema: FormSchema[] = [
