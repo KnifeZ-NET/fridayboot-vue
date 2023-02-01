@@ -16,11 +16,6 @@ export const columns: BasicColumn[] = [
     dataIndex: 'createTime',
     width: 120,
   },
-  {
-    title: '角色介绍',
-    dataIndex: 'description',
-    width: 120,
-  },
 ];
 
 export const searchFormSchema: FormSchema[] = [
