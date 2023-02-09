@@ -18,7 +18,6 @@
 
   import { menuTreeList, update, create, getMenuPermissionList } from '/@/api/security/admin/menu';
   import { TreeItem } from '/@/components/Tree';
-  import { method } from 'lodash';
 
   export default defineComponent({
     name: 'MenuDrawer',

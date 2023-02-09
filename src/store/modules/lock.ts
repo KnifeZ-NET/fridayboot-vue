@@ -42,10 +42,10 @@ export const useLockStore = defineStore({
           const res = await userStore.login({
             username,
             password: password!,
+            rememberMe: false,
             goHome: false,
             mode: 'none',
           });
-          debugger;
           if (res) {
             this.resetLockInfo();
           }
