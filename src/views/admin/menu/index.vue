@@ -49,6 +49,7 @@
         title: '菜单列表',
         api: menuTreeList,
         columns,
+        rowKey: 'id',
         formConfig: {
           labelWidth: 120,
           schemas: searchFormSchema,
@@ -89,7 +90,8 @@
       }
 
       function handleSuccess() {
-        reload();
+        //等待后台数据更新
+        setTimeout(() => reload(), 10);
       }
 
       function onFetchSuccess() {

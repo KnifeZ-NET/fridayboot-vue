@@ -20,7 +20,7 @@ import { h } from 'vue';
 interface UserState {
   userInfo: Nullable<UserInfo>;
   token?: string;
-  roleList: RoleEnum[];
+  roleList: string[];
   grantedPolicies: string[];
   sessionTimeout?: boolean;
   lastUpdateTime: number;
@@ -49,8 +49,8 @@ export const useUserStore = defineStore({
     getToken(): string {
       return this.token || getAuthCache<string>(TOKEN_KEY);
     },
-    getRoleList(): RoleEnum[] {
-      return this.roleList.length > 0 ? this.roleList : getAuthCache<RoleEnum[]>(ROLES_KEY);
+    getRoleList(): string[] {
+      return this.roleList.length > 0 ? this.roleList : getAuthCache<string[]>(ROLES_KEY);
     },
     getGrantedPolicies(): string[] {
       return this.grantedPolicies.length > 0
@@ -69,7 +69,7 @@ export const useUserStore = defineStore({
       this.token = info ? info : ''; // for null or undefined value
       setAuthCache(TOKEN_KEY, info);
     },
-    setRoleList(roleList: RoleEnum[]) {
+    setRoleList(roleList: string[]) {
       this.roleList = roleList;
       setAuthCache(ROLES_KEY, roleList);
     },
@@ -104,7 +104,7 @@ export const useUserStore = defineStore({
         const { goHome = true, mode, ...loginParams } = params;
         const data = await loginApi(loginParams, mode);
         const { accessToken } = data;
-        // save token
+        // 保存token
         this.setToken(accessToken);
         return this.afterLoginAction(goHome);
       } catch (error) {
@@ -113,9 +113,8 @@ export const useUserStore = defineStore({
     },
     async afterLoginAction(goHome?: boolean): Promise<GetUserInfoModel | null> {
       if (!this.getToken) return null;
-      // get user info
+      // 获取用户信息
       const userInfo = await this.getUserInfoAction();
-
       const sessionTimeout = this.sessionTimeout;
       if (sessionTimeout) {
         this.setSessionTimeout(false);
@@ -130,9 +129,10 @@ export const useUserStore = defineStore({
           permissionStore.setDynamicAddedRoute(true);
         }
         if (goHome) {
-          location.reload();
-          // router.push(PageEnum.BASE_HOME);
-          // await router.replace(PageEnum.BASE_HOME);
+          // location.reload();
+          // 跳转首页
+          router.push(PageEnum.BASE_HOME);
+          await router.replace(PageEnum.BASE_HOME);
         }
       }
       return userInfo;
@@ -140,10 +140,9 @@ export const useUserStore = defineStore({
     async getUserInfoAction(): Promise<UserInfo | null> {
       if (!this.getToken) return null;
       const userInfo = await getUserInfo();
-      const { roles = [] } = userInfo;
-      if (isArray(roles)) {
-        const roleList = roles.map((item) => item.value) as RoleEnum[];
-        this.setRoleList(roleList);
+      const { userRoles = [] } = userInfo;
+      if (isArray(userRoles)) {
+        this.setRoleList(userRoles);
       } else {
         userInfo.roles = [];
         this.setRoleList([]);

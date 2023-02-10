@@ -78,7 +78,7 @@
             create(values);
           }
           closeDrawer();
-          emit('success');
+          emit('success', { isUpdate: unref(isUpdate), values: { ...values, id: rowId.value } });
         } finally {
           setDrawerProps({ confirmLoading: false });
         }

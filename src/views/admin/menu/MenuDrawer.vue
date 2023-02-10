@@ -70,7 +70,6 @@
               });
             }
           }
-          console.log(path);
         }
         permissionTreeData.value = tempTrees;
         updateSchema({
@@ -94,7 +93,6 @@
           } else {
             create(values);
           }
-          console.log(values);
           closeDrawer();
           emit('success');
         } finally {

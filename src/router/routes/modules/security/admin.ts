@@ -2,6 +2,7 @@ import type { AppRouteModule } from '/@/router/types';
 
 import { LAYOUT } from '/@/router/constant';
 import { t } from '/@/hooks/web/useI18n';
+import { MenuApi } from '/@/api/security/admin/menu';
 
 const admin: AppRouteModule = {
   path: '/admin',

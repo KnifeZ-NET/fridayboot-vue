@@ -121,3 +121,8 @@ export interface AppUserPagedQueryRequest {
    */
   organizationIds?: string[];
 }
+
+export interface RoleInfo {
+  roleName: string;
+  value: string;
+}

@@ -18,8 +18,8 @@ import { ERROR_LOG_ROUTE, PAGE_NOT_FOUND_ROUTE } from '/@/router/routes/basic';
 
 import { filter } from '/@/utils/helper/treeHelper';
 
-import { getMenuList } from '/@/api/sys/menu';
-import { getPermCode } from '/@/api/sys/user';
+import { getMenuList } from '/@/api/security/admin/menu';
+import { getPermCode } from '/@/api/security/auth';
 
 import { useMessage } from '/@/hooks/web/useMessage';
 import { PageEnum } from '/@/enums/pageEnum';
@@ -103,9 +103,9 @@ export const usePermissionStore = defineStore({
       this.backMenuList = [];
       this.lastBuildMenuTime = 0;
     },
-    async changePermissionCode() {
-      const codeList = await getPermCode();
-      this.setPermCodeList(codeList);
+    async changePermissionCode(userStore: any) {
+      const permissions = toRaw(userStore.getGrantedPolicies) || [];
+      this.setPermCodeList(permissions);
     },
 
     // 构建路由
@@ -113,12 +113,10 @@ export const usePermissionStore = defineStore({
       const { t } = useI18n();
       const userStore = useUserStore();
       const appStore = useAppStoreWithOut();
-
       let routes: AppRouteRecordRaw[] = [];
       const roleList = toRaw(userStore.getRoleList) || [];
       const { permissionMode = projectSetting.permissionMode } = appStore.getProjectConfig;
-
-      // 路由过滤器 在 函数filter 作为回调传入遍历使用
+      // role过滤器 路由过滤器 在 函数filter 作为回调传入遍历使用
       const routeFilter = (route: AppRouteRecordRaw) => {
         const { meta } = route;
         // 抽出角色
@@ -129,6 +127,7 @@ export const usePermissionStore = defineStore({
       };
 
       const grantedPolicies = userStore.getGrantedPolicies;
+      // permission过滤器
       const routerGrantedPolicyFilter = (route: AppRouteRecordRaw) => {
         const { meta } = route;
         const { grantedPolicy } = meta || {};
@@ -176,6 +175,7 @@ export const usePermissionStore = defineStore({
         return;
       };
 
+      debugger;
       switch (permissionMode) {
         // 角色权限
         case PermissionModeEnum.ROLE:
@@ -214,8 +214,7 @@ export const usePermissionStore = defineStore({
           routes = flatMultiLevelRoutes(routes);
           break;
 
-        //  If you are sure that you do not need to do background dynamic permissions, please comment the entire judgment below
-        //  如果确定不需要做后台动态权限，请在下方评论整个判断
+        // 后台权限
         case PermissionModeEnum.BACK:
           const { createMessage } = useMessage();
 
@@ -230,7 +229,8 @@ export const usePermissionStore = defineStore({
           // 这个功能可能只需要执行一次，实际项目可以自己放在合适的时间
           let routeList: AppRouteRecordRaw[] = [];
           try {
-            await this.changePermissionCode();
+            await this.changePermissionCode(userStore);
+            // 获取菜单
             routeList = (await getMenuList()) as AppRouteRecordRaw[];
           } catch (error) {
             console.error(error);
