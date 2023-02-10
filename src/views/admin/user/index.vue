@@ -105,7 +105,7 @@
       }
 
       function handleSelect(organizationId = '') {
-        searchInfo.organizationId = organizationId;
+        searchInfo.organizationIds = [organizationId];
         reload();
       }
 

@@ -49,25 +49,29 @@
         const menuPermissionData = await getMenuPermissionList();
         const tempTrees: any = [];
         var paths = menuPermissionData.data.paths;
-        menuPermissionData.data.tags.forEach((tag) => {
-          var node = {
-            id: tag.name,
-            name: tag.name,
-            children: [],
-          };
-          for (var path in paths) {
-            var methods = paths[path];
-            for (var action in methods) {
-              if (methods[action].tags.indexOf(tag.name) > -1) {
-                node.children.push({
-                  id: path + ':' + action,
-                  name: methods[action].summary,
-                } as never);
-              }
+        for (var path in paths) {
+          var methods = paths[path];
+          for (var action in methods) {
+            if (methods[action].tags.length > 0) {
+              methods[action].tags.forEach((tag: string) => {
+                if (!tempTrees.find((x) => x.id == tag)) {
+                  tempTrees.push({
+                    id: tag,
+                    name: tag,
+                    children: [] as never,
+                  });
+                }
+                tempTrees
+                  .find((x) => x.id == tag)
+                  .children.push({
+                    id: path + ':' + action,
+                    name: tag + '/' + methods[action].summary,
+                  });
+              });
             }
           }
-          tempTrees.push(node);
-        });
+          console.log(path);
+        }
         permissionTreeData.value = tempTrees;
         updateSchema({
           field: 'parentId',

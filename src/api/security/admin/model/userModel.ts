@@ -115,4 +115,9 @@ export interface AppUserPagedQueryRequest {
    * 用户姓名
    */
   username?: string;
+
+  /**
+   * 所属部门
+   */
+  organizationIds?: string[];
 }

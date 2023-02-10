@@ -22,7 +22,6 @@ export const columns: BasicColumn[] = [
   {
     title: '菜单标识',
     dataIndex: 'route',
-    width: 120,
   },
   {
     title: '排序',
@@ -166,6 +165,7 @@ export const formSchema: FormSchema[] = [
         key: 'id',
         value: 'id',
       },
+      treeDefaultExpandAll: true,
       getPopupContainer: () => document.body,
     },
     ifShow: ({ values }) => !isDir(values.type),
