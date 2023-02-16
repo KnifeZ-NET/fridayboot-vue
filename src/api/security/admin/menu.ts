@@ -6,7 +6,7 @@ export enum MenuApi {
   TreeList = '/menu/tree-list',
   Create = '/menu',
   RestfulApi = '/menu/',
-  GetMenuList = '/menu/list',
+  GetMenuList = '/menu/menu-routes',
   PermissionList = '/v3/api-docs?group=v1.x',
 }
 

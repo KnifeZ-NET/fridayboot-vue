@@ -175,7 +175,6 @@ export const usePermissionStore = defineStore({
         return;
       };
 
-      debugger;
       switch (permissionMode) {
         // 角色权限
         case PermissionModeEnum.ROLE:
@@ -235,7 +234,6 @@ export const usePermissionStore = defineStore({
           } catch (error) {
             console.error(error);
           }
-
           // Dynamically introduce components
           // 动态引入组件
           routeList = transformObjToRoute(routeList);
@@ -244,17 +242,14 @@ export const usePermissionStore = defineStore({
           //  后台路由到菜单结构
           const backMenuList = transformRouteToMenu(routeList);
           this.setBackMenuList(backMenuList);
-
           // remove meta.ignoreRoute item
           // 删除 meta.ignoreRoute 项
           routeList = filter(routeList, routeRemoveIgnoreFilter);
           routeList = routeList.filter(routeRemoveIgnoreFilter);
-
           routeList = flatMultiLevelRoutes(routeList);
           routes = [PAGE_NOT_FOUND_ROUTE, ...routeList];
           break;
       }
-
       routes.push(ERROR_LOG_ROUTE);
       patchHomeAffix(routes);
       return routes;

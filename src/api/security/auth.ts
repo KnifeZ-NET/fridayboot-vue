@@ -2,7 +2,7 @@ import { defHttp } from '/@/utils/http/axios';
 import { LoginParams, LoginResultModel, GetUserInfoModel } from './model/userModel';
 
 import { ErrorMessageMode } from '/#/axios';
-import { ApplicationConfigruationModel } from './model/applicationConfigruationModel';
+import { AppConfigurationModel } from './model/appConfigurationModel';
 
 enum Api {
   Login = '/auth/login',
@@ -29,7 +29,7 @@ export function loginApi(params: LoginParams, mode: ErrorMessageMode = 'modal') 
 }
 
 export function applicationConfiguration() {
-  return defHttp.get<ApplicationConfigruationModel>({ url: Api.ApplicationConfiguration });
+  return defHttp.get<AppConfigurationModel>({ url: Api.ApplicationConfiguration });
 }
 
 /**

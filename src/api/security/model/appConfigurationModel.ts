@@ -1,8 +1,8 @@
 import { RouteItem } from './menuModel';
 
-export interface ApplicationConfigruationModel {
+export interface AppConfigurationModel {
   // 用户id
-  userid: string;
+  userId: string;
   // 语言
   language: string;
   // 权限
