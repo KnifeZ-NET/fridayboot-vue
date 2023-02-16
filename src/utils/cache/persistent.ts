@@ -14,10 +14,12 @@ import {
   APP_SESSION_CACHE_KEY,
   MULTIPLE_TABS_KEY,
   GRANTED_POLICIES_KEY,
+  BACK_MENU,
 } from '/@/enums/cacheEnum';
 import { DEFAULT_CACHE_TIME } from '/@/settings/encryptionSetting';
 import { toRaw } from 'vue';
 import { pick, omit } from 'lodash-es';
+import { AppRouteRecordRaw } from '/@/router/types';
 
 interface BasicStore {
   [TOKEN_KEY]: string | number | null | undefined;
@@ -27,6 +29,7 @@ interface BasicStore {
   [LOCK_INFO_KEY]: LockInfo;
   [PROJ_CFG_KEY]: ProjectConfig;
   [MULTIPLE_TABS_KEY]: RouteLocationNormalized[];
+  [BACK_MENU]: AppRouteRecordRaw[];
 }
 
 type LocalStore = BasicStore;

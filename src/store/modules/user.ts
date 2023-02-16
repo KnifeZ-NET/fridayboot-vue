@@ -128,12 +128,7 @@ export const useUserStore = defineStore({
           router.addRoute(PAGE_NOT_FOUND_ROUTE as unknown as RouteRecordRaw);
           permissionStore.setDynamicAddedRoute(true);
         }
-        if (goHome) {
-          // location.reload();
-          // 跳转首页
-          router.push(PageEnum.BASE_HOME);
-          await router.replace(PageEnum.BASE_HOME);
-        }
+        goHome && (await router.replace(userInfo?.homePath || PageEnum.BASE_HOME));
       }
       return userInfo;
     },

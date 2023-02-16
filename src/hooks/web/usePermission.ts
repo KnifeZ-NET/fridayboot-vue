@@ -43,6 +43,7 @@ export function usePermission() {
    * @param id
    */
   async function resume() {
+    debugger;
     const tabStore = useMultipleTabStore();
     tabStore.clearCacheTabs();
     resetRouter();

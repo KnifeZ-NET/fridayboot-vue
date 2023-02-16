@@ -19,16 +19,15 @@ export function createPermissionGuard(router: Router) {
   const userStore = useUserStoreWithOut();
   const permissionStore = usePermissionStoreWithOut();
   router.beforeEach(async (to, from, next) => {
-    if (
-      from.path === ROOT_PATH &&
-      to.path === PageEnum.BASE_HOME &&
-      userStore.getUserInfo.homePath &&
-      userStore.getUserInfo.homePath !== PageEnum.BASE_HOME
-    ) {
-      next(userStore.getUserInfo.homePath);
-      return;
-    }
-
+    // if (
+    //   from.path === ROOT_PATH &&
+    //   to.path === PageEnum.BASE_HOME &&
+    //   userStore.getUserInfo.homePath &&
+    //   userStore.getUserInfo.homePath !== PageEnum.BASE_HOME
+    // ) {
+    //   next();
+    //   return;
+    // }
     const token = userStore.getToken;
 
     // Whitelist can be directly entered
@@ -46,8 +45,7 @@ export function createPermissionGuard(router: Router) {
       next();
       return;
     }
-
-    // token does not exist
+    // token or user does not exist
     if (!token) {
       // You can access without permission. You need to set the routing meta.ignoreAuth to true
       if (to.meta.ignoreAuth) {
@@ -94,7 +92,6 @@ export function createPermissionGuard(router: Router) {
       next();
       return;
     }
-
     const routes = await permissionStore.buildRoutesAction();
 
     routes.forEach((route) => {

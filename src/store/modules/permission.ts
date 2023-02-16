@@ -19,10 +19,12 @@ import { ERROR_LOG_ROUTE, PAGE_NOT_FOUND_ROUTE } from '/@/router/routes/basic';
 import { filter } from '/@/utils/helper/treeHelper';
 
 import { getMenuList } from '/@/api/security/admin/menu';
-import { getPermCode } from '/@/api/security/auth';
 
 import { useMessage } from '/@/hooks/web/useMessage';
 import { PageEnum } from '/@/enums/pageEnum';
+import { BACK_MENU } from '/@/enums/cacheEnum';
+import { Persistent } from '/@/utils/cache/persistent';
+import { cloneDeep } from 'lodash-es';
 
 interface PermissionState {
   // Permission code list
@@ -37,6 +39,8 @@ interface PermissionState {
   // Backstage menu list
   // 后台菜单列表
   backMenuList: Menu[];
+  // 动态路由
+  dynamicRoutes: AppRouteRecordRaw[];
   // 菜单列表
   frontMenuList: Menu[];
 }
@@ -55,6 +59,8 @@ export const usePermissionStore = defineStore({
     // Backstage menu list
     // 后台菜单列表
     backMenuList: [],
+    // 动态路由
+    dynamicRoutes: [],
     // menu List
     // 菜单列表
     frontMenuList: [],
@@ -62,6 +68,17 @@ export const usePermissionStore = defineStore({
   getters: {
     getPermCodeList(): string[] | number[] {
       return this.permCodeList;
+    },
+    getDynamicRoutes(): AppRouteRecordRaw[] {
+      if (this.dynamicRoutes.length > 0) {
+        return this.dynamicRoutes;
+      } else {
+        const routes = Persistent.getSession<AppRouteRecordRaw[]>(BACK_MENU) as AppRouteRecordRaw[];
+        if (routes === undefined) {
+          return [] as AppRouteRecordRaw[];
+        }
+        return routes;
+      }
     },
     getBackMenuList(): Menu[] {
       return this.backMenuList;
@@ -79,6 +96,11 @@ export const usePermissionStore = defineStore({
   actions: {
     setPermCodeList(codeList: string[]) {
       this.permCodeList = codeList;
+    },
+
+    setDynamicRoutes(list: AppRouteRecordRaw[]) {
+      this.dynamicRoutes = list;
+      Persistent.setSession(BACK_MENU, list);
     },
 
     setBackMenuList(list: Menu[]) {
@@ -230,14 +252,19 @@ export const usePermissionStore = defineStore({
           try {
             await this.changePermissionCode(userStore);
             // 获取菜单
-            routeList = (await getMenuList()) as AppRouteRecordRaw[];
+            if (this.getDynamicRoutes.length == 0) {
+              const dynamicRoutes = (await getMenuList()) as AppRouteRecordRaw[];
+              this.setDynamicRoutes(dynamicRoutes);
+              routeList = cloneDeep(dynamicRoutes);
+            } else {
+              routeList = cloneDeep(this.getDynamicRoutes);
+            }
           } catch (error) {
             console.error(error);
           }
           // Dynamically introduce components
           // 动态引入组件
           routeList = transformObjToRoute(routeList);
-
           //  Background routing to menu structure
           //  后台路由到菜单结构
           const backMenuList = transformRouteToMenu(routeList);

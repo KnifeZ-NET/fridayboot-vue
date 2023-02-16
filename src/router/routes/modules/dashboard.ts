@@ -7,7 +7,7 @@ const dashboard: AppRouteModule = {
   path: '/dashboard',
   name: 'Dashboard',
   component: LAYOUT,
-  redirect: '/dashboard/analysis',
+  redirect: '/dashboard/workbench',
   meta: {
     orderNo: 10,
     icon: 'ion:grid-outline',
@@ -22,16 +22,7 @@ const dashboard: AppRouteModule = {
         affix: true,
         title: t('routes.dashboard.workbench'),
       },
-    },
-    {
-      path: 'analysis',
-      name: 'Analysis',
-      component: () => import('/@/views/dashboard/analysis/index.vue'),
-      meta: {
-        // affix: true,
-        title: t('routes.dashboard.analysis'),
-      },
-    },
+    }
   ],
 };
 
