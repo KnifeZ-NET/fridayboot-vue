@@ -4,13 +4,21 @@ import { defHttp } from '/@/utils/http/axios';
 
 enum Api {
   LIST = '/dictionary-config/list/',
+  TREE = '/dictionary-config/tree/',
   CREATE = '/dictionary-config',
   RESTFUL_API = '/dictionary-config/',
 }
 
-export function pageListByDictCode(query: any) {
-  return defHttp.post<BasicFetchResult<AppDictionaryConfig>>({
+export function listByDictCode(query: any) {
+  return defHttp.post<AppDictionaryConfig[]>({
     url: Api.LIST + query.dictCode,
+    data: query,
+  });
+}
+
+export function dictionaryConfigTree(query: any) {
+  return defHttp.post<any>({
+    url: Api.TREE + query.dictCode,
     data: query,
   });
 }

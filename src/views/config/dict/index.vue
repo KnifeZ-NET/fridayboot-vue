@@ -2,7 +2,7 @@
   <PageWrapper dense contentFullHeight fixedHeight contentClass="flex">
     <BasicTable @register="registerTable" :searchInfo="searchInfo">
       <template #toolbar>
-        <a-button type="primary" @click="handleCreate">新增字典</a-button>
+        <a-button type="primary" @click="handleCreate" v-auth="'/Create'"> 新增字典 </a-button>
       </template>
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'action'">
@@ -11,11 +11,13 @@
               {
                 icon: 'clarity:note-edit-line',
                 tooltip: '编辑',
+                auth: '/Update',
                 onClick: handleEdit.bind(null, record),
               },
               {
                 icon: 'ant-design:delete-outlined',
                 color: 'error',
+                auth: '/Delete',
                 popConfirm: {
                   title: '是否确认删除',
                   placement: 'left',
@@ -24,6 +26,7 @@
               },
               {
                 icon: 'clarity:wrench-line',
+                auth: '/DictionaryConfig',
                 tooltip: '字典配置',
                 onClick: handleConfig.bind(null, record),
               },
@@ -50,6 +53,7 @@
   import ModifyModal from './ModifyModal.vue';
   import DictionaryConfigDrawer from './DictionaryConfigDrawer.vue';
   import { useDrawer } from '/@/components/Drawer';
+  import { usePermission } from '/@/hooks/web/usePermission';
   export default defineComponent({
     components: {
       PageWrapper,
@@ -63,6 +67,7 @@
       const searchInfo = reactive<Recordable>({});
       const [registerModal, { openModal }] = useModal();
       const [registerDrawer, { openDrawer }] = useDrawer();
+      const { hasPermission } = usePermission();
       const [registerTable, { reload, updateTableDataRecord }] = useTable({
         title: '字典列表',
         api: dictionaryList,
@@ -75,7 +80,7 @@
         },
         bordered: true,
         showTableSetting: true,
-        useSearchForm: true,
+        useSearchForm: hasPermission('/Search'),
         handleSearchInfoFn(info) {
           console.log('handleSearchInfoFn', info);
           return info;

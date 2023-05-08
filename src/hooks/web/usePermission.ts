@@ -63,7 +63,11 @@ export function usePermission() {
     if (!value) {
       return def;
     }
-
+    if (typeof value == 'string') {
+      if (value.startsWith('/')) {
+        value = router.currentRoute.value.name?.toString() + value;
+      }
+    }
     const permMode = projectSetting.permissionMode;
 
     if ([PermissionModeEnum.ROUTE_MAPPING, PermissionModeEnum.ROLE].includes(permMode)) {

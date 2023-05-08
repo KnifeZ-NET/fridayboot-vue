@@ -4,6 +4,11 @@ import { allRoles } from '/@/api/security/admin/role';
 
 export const columns: BasicColumn[] = [
   {
+    title: '部门',
+    dataIndex: 'organizationName',
+    width: 120,
+  },
+  {
     title: '帐号',
     dataIndex: 'account',
     width: 120,
@@ -14,7 +19,17 @@ export const columns: BasicColumn[] = [
     width: 120,
   },
   {
-    title: '锁定',
+    title: '邮箱',
+    dataIndex: 'email',
+    width: 120,
+  },
+  {
+    title: '角色',
+    dataIndex: 'roles',
+    width: 120,
+  },
+  {
+    title: '是否锁定',
     dataIndex: 'locked',
     width: 120,
   },

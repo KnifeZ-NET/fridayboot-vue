@@ -59,3 +59,27 @@ export interface AppDictionaryConfig {
    */
   valueType?: string;
 }
+
+/**
+ * TreeLong
+ */
+export interface Response {
+  config?: TreeNodeConfig;
+  empty?: boolean;
+  id?: number;
+  name?: String;
+  parentId?: number;
+  weight?: { [key: string]: any };
+}
+
+/**
+ * TreeNodeConfig
+ */
+export interface TreeNodeConfig {
+  childrenKey?: string;
+  deep?: number;
+  idKey?: string;
+  nameKey?: string;
+  parentIdKey?: string;
+  weightKey?: string;
+}

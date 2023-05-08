@@ -39,11 +39,13 @@
   import MenuDrawer from './MenuDrawer.vue';
 
   import { columns, searchFormSchema } from './menu.data';
+  import { usePermission } from '/@/hooks/web/usePermission';
 
   export default defineComponent({
     name: 'MenuManagement',
     components: { BasicTable, MenuDrawer, TableAction },
     setup() {
+      const { hasPermission } = usePermission();
       const [registerDrawer, { openDrawer }] = useDrawer();
       const [registerTable, { reload, expandAll }] = useTable({
         title: '菜单列表',
@@ -57,7 +59,7 @@
         isTreeTable: true,
         pagination: false,
         striped: false,
-        useSearchForm: true,
+        useSearchForm: hasPermission('/Search'),
         showTableSetting: true,
         bordered: true,
         showIndexColumn: false,

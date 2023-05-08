@@ -29,10 +29,6 @@ export const columns: BasicColumn[] = [
     width: 50,
   },
   {
-    title: '组件',
-    dataIndex: 'component',
-  },
-  {
     title: '状态',
     dataIndex: 'enabled',
     width: 80,

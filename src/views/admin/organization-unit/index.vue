@@ -2,7 +2,7 @@
   <div>
     <BasicTable @register="registerTable" :searchInfo="searchInfo">
       <template #toolbar>
-        <a-button type="primary" @click="handleCreate">新增部门</a-button>
+        <a-button type="primary" @click="handleCreate" v-auth="'/Create'"> 新增部门 </a-button>
       </template>
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'action'">
@@ -11,15 +11,18 @@
               {
                 icon: 'clarity:note-edit-line',
                 tooltip: '编辑',
+                auth: '/Update',
                 onClick: handleEdit.bind(null, record),
               },
               {
                 icon: 'clarity:administrator-line',
+                auth: '/ManageUser',
                 tooltip: '分配人员',
                 onClick: handleEdit.bind(null, record),
               },
               {
                 icon: 'ant-design:delete-outlined',
+                auth: '/Delete',
                 color: 'error',
                 popConfirm: {
                   title: '是否确认删除',

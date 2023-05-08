@@ -9,7 +9,6 @@ import { usePermission } from '/@/hooks/web/usePermission';
 
 function isAuth(el: Element, binding: any) {
   const { hasPermission } = usePermission();
-
   const value = binding.value;
   if (!value) return;
   if (!hasPermission(value)) {

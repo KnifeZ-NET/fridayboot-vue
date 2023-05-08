@@ -8,7 +8,7 @@
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { BasicForm, useForm } from '/@/components/Form/index';
   import { configFormSchema } from './data';
-  import { update, create } from '/@/api/security/config/dictionaryConfig';
+  import { update, create, dictionaryConfigTree } from '/@/api/security/config/dictionaryConfig';
   export default defineComponent({
     name: 'DictionaryConfigModal',
     components: { BasicModal, BasicForm },
@@ -17,7 +17,7 @@
       const isUpdate = ref(true);
       const rowId = ref('');
       const dictCode = ref('');
-      const [registerForm, { setFieldsValue, resetFields, validate }] = useForm({
+      const [registerForm, { setFieldsValue, resetFields, validate, updateSchema }] = useForm({
         labelWidth: 100,
         baseColProps: { span: 24 },
         schemas: configFormSchema,
@@ -32,12 +32,18 @@
         isUpdate.value = !!data?.isUpdate;
         if (unref(isUpdate)) {
           rowId.value = data.record.id;
+          dictCode.value = data.record.dictCode;
           setFieldsValue({
             ...data.record,
           });
         } else {
           dictCode.value = data.dictCode;
         }
+        const treeData = await dictionaryConfigTree({ dictCode: dictCode.value });
+        updateSchema({
+          field: 'parentId',
+          componentProps: { treeData },
+        });
       });
 
       const getTitle = computed(() => (!unref(isUpdate) ? '新增' : '编辑'));

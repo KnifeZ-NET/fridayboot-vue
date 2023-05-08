@@ -41,9 +41,15 @@ export const searchFormSchema: FormSchema[] = [
     colProps: { span: 8 },
   },
   {
-    field: 'code',
-    label: '字典编码',
-    component: 'Input',
+    field: 'enabled',
+    label: '状态',
+    component: 'Select',
+    componentProps: {
+      options: [
+        { label: '锁定', value: false },
+        { label: '启用', value: true },
+      ],
+    },
     colProps: { span: 8 },
   },
 ];
@@ -65,7 +71,7 @@ export const formSchema: FormSchema[] = [
   {
     field: 'enabled',
     label: '状态',
-    component: 'RadioGroup',
+    component: 'RadioButtonGroup',
     componentProps: {
       options: [
         {
@@ -125,6 +131,27 @@ export const configColumns: BasicColumn[] = [
   },
 ];
 
+export const configSearchFormSchema: FormSchema[] = [
+  {
+    field: 'name',
+    label: '名称',
+    component: 'Input',
+    colProps: { span: 8 },
+  },
+  {
+    field: 'enabled',
+    label: '状态',
+    component: 'Select',
+    componentProps: {
+      options: [
+        { label: '锁定', value: false },
+        { label: '启用', value: true },
+      ],
+    },
+    colProps: { span: 8 },
+  },
+];
+
 export const configFormSchema: FormSchema[] = [
   {
     field: 'name',
@@ -138,7 +165,19 @@ export const configFormSchema: FormSchema[] = [
     component: 'Input',
     required: true,
   },
-
+  {
+    field: 'parentId',
+    label: '父级字典',
+    component: 'TreeSelect',
+    componentProps: {
+      fieldNames: {
+        label: 'name',
+        key: 'id',
+        value: 'id',
+      },
+      getPopupContainer: () => document.body,
+    },
+  },
   {
     field: 'valueType',
     label: '数据类型',
@@ -157,7 +196,7 @@ export const configFormSchema: FormSchema[] = [
   {
     field: 'enabled',
     label: '状态',
-    component: 'RadioGroup',
+    component: 'RadioButtonGroup',
     componentProps: {
       options: [
         {

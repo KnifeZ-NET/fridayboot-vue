@@ -17,6 +17,7 @@
   import { BasicDrawer, useDrawerInner } from '/@/components/Drawer';
 
   import { menuTreeList, update, create, getMenuPermissionList } from '/@/api/security/admin/menu';
+  import { listByDictCode } from '/@/api/security/config/dictionaryConfig';
   import { TreeItem } from '/@/components/Tree';
 
   export default defineComponent({
@@ -46,6 +47,10 @@
           });
         }
         const treeData = await menuTreeList({ includeButton: false });
+        updateSchema({
+          field: 'parentId',
+          componentProps: { treeData },
+        });
         const menuPermissionData = await getMenuPermissionList();
         const tempTrees: any = [];
         var paths = menuPermissionData.data.paths;
@@ -73,12 +78,49 @@
         }
         permissionTreeData.value = tempTrees;
         updateSchema({
-          field: 'parentId',
-          componentProps: { treeData },
-        });
-        updateSchema({
           field: 'permission',
           componentProps: { treeData: permissionTreeData },
+        });
+        var buttonList = await listByDictCode({ dictCode: 'system_button' });
+        var buttons = buttonList.map(function (item) {
+          return { code: item.value, value: item.name };
+        });
+        updateSchema({
+          field: 'type',
+          componentProps: {
+            onChange: function (e) {
+              if (e.target) {
+                if (e.target.value == 2) {
+                  // 按钮
+                  updateSchema({
+                    field: 'name',
+                    component: 'AutoComplete',
+                    componentProps: {
+                      options: buttons,
+                      onChange: function (value, option) {
+                        console.log(value);
+                        if (option.code) {
+                          setFieldsValue({
+                            route: option.code,
+                          });
+                        }
+                      },
+                    },
+                  });
+                } else {
+                  updateSchema({
+                    field: 'name',
+                    component: 'Input',
+                    componentProps: {
+                      onChange: function (value) {
+                        console.log(value);
+                      },
+                    },
+                  });
+                }
+              }
+            },
+          },
         });
       });
 

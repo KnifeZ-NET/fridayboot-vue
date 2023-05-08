@@ -3,7 +3,9 @@
     <PageWrapper dense contentFullHeight fixedHeight contentClass="flex">
       <BasicTable @register="registerTable" :search-info="searchInfo">
         <template #toolbar>
-          <a-button type="primary" @click="handleCreate">新增字典配置</a-button>
+          <a-button type="primary" @click="handleCreate" v-auth="'DictionaryConfig/Create'">
+            新增字典配置
+          </a-button>
         </template>
         <template #bodyCell="{ column, record }">
           <template v-if="column.key === 'action'">
@@ -12,11 +14,13 @@
                 {
                   icon: 'clarity:note-edit-line',
                   tooltip: '编辑',
+                  auth: 'DictionaryConfig/Update',
                   onClick: handleEdit.bind(null, record),
                 },
                 {
                   icon: 'ant-design:delete-outlined',
                   color: 'error',
+                  auth: 'DictionaryConfig/Delete',
                   popConfirm: {
                     title: '是否确认删除',
                     placement: 'left',
@@ -42,12 +46,13 @@
   import { BasicDrawer, useDrawerInner } from '/@/components/Drawer';
   import DictionaryConfigModal from './DictionaryConfigModal.vue';
   import { useModal } from '/@/components/Modal';
-  import { pageListByDictCode, remove } from '/@/api/security/config/dictionaryConfig';
-  import { configColumns } from './data';
+  import { listByDictCode, remove } from '/@/api/security/config/dictionaryConfig';
+  import { configColumns, configSearchFormSchema } from './data';
   import { Switch } from 'ant-design-vue';
+  import { usePermission } from '/@/hooks/web/usePermission';
 
   export default defineComponent({
-    name: 'MenuDrawer',
+    name: 'DictionaryConfig',
     components: {
       BasicDrawer,
       BasicTable,
@@ -60,15 +65,21 @@
     setup() {
       const rowCode = ref('');
       const searchInfo = ref({ dictCode: 'config' });
+      const { hasPermission } = usePermission();
       const [registerModal, { openModal }] = useModal();
       const [registerTable, { reload }] = useTable({
         title: '',
-        api: pageListByDictCode,
+        api: listByDictCode,
         columns: configColumns,
+        formConfig: {
+          labelWidth: 120,
+          schemas: configSearchFormSchema,
+          autoSubmitOnEnter: true,
+        },
         rowKey: 'id',
         bordered: true,
         showTableSetting: true,
-        useSearchForm: false,
+        useSearchForm: hasPermission('DictionaryConfig/Search'),
         pagination: false,
         actionColumn: {
           width: 120,

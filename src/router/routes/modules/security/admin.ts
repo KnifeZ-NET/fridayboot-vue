@@ -29,7 +29,7 @@ const admin: AppRouteModule = {
       meta: {
         title: t('routes.demo.system.account'),
         ignoreKeepAlive: false,
-        // grantedPolicy: 'AppUserController.list',
+        // grantedPolicy: 'UserManagement',
       },
       component: () => import('/@/views/admin/user/index.vue'),
     },

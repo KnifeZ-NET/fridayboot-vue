@@ -34,6 +34,11 @@
         <template v-else-if="column.key === 'locked'">
           <Switch v-model:checked="record.locked" :disabled="true" />
         </template>
+        <template v-else-if="column.key === 'roles'">
+          <Tag v-for="role in record.roles" :color="getThemeColor" :key="role.id">
+            {{ role.displayName }}
+          </Tag>
+        </template>
       </template>
     </BasicTable>
     <ModifyModal @register="registerModal" @success="handleSuccess" />
@@ -47,15 +52,25 @@
   import { columns, searchFormSchema } from './data';
   import OrganizationTree from './OrganizationTree.vue';
   import { userList, remove } from '/@/api/security/admin/user';
+  import { useRootSetting } from '/@/hooks/setting/useRootSetting';
 
-  import { Switch } from 'ant-design-vue';
+  import { Switch, Tag } from 'ant-design-vue';
   import { useModal } from '/@/components/Modal';
   import ModifyModal from './ModifyModal.vue';
   export default defineComponent({
-    components: { PageWrapper, BasicTable, TableAction, OrganizationTree, ModifyModal, Switch },
+    components: {
+      PageWrapper,
+      BasicTable,
+      TableAction,
+      OrganizationTree,
+      ModifyModal,
+      Switch,
+      Tag,
+    },
     setup() {
       const go = useGo();
       const searchInfo = reactive<Recordable>({});
+      const { getThemeColor } = useRootSetting();
       const [registerModal, { openModal }] = useModal();
       const [registerTable, { reload, updateTableDataRecord }] = useTable({
         title: '帐号列表',
@@ -122,6 +137,7 @@
         handleSuccess,
         handleSelect,
         handleCreate,
+        getThemeColor,
         searchInfo,
       };
     },
